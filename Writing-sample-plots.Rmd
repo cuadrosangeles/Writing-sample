@@ -1,6 +1,5 @@
 ---
-title: "Peru: Plotting cumulative change of Ministers vs proportion of seats in Congress, 2001-2022"
-author: "Oscar Cuadros"
+title: "Peru: Plotting cumulative change of Ministers and proportion of seats in Congress, 2001-2022"
 output: pdf_document
 ---
 
@@ -14,12 +13,11 @@ library(readxl)
 ```
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
-setwd("C:/Users/cuadr/OneDrive/Escritorio/UCHICAGO/16. AFTER HARRIS/World Bank RA/Writting sample/Writting-sample")
 data_peru1 <- read_excel("Count authorities.xlsx", sheet = "R count")
 data_peru_cong <- read_excel("Count authorities.xlsx", sheet = "R general")
 ```
 
-# Plotting cumulative change of Ministers, 2001-2022
+## Plotting cumulative change of Ministers, 2001-2022
 
 ```{r}
 data_peru1 %>% 
@@ -27,9 +25,11 @@ data_peru1 %>%
   geom_area(fill = "dodgerblue4") + 
   xlab("Governmental months") +
   ylab("Cumulative change of Ministers") +
+  labs(caption = "(*) Current government term \n Source: 'Diario Oficial El Peruano' web page (collected of February 13th, 2022)") +
   ggtitle("Cumulative change of Ministers per month on each government, 2001-2022") + 
   facet_wrap(vars(`Government_period`), strip.position = "top", nrow = 1) + 
-  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5)) +
   scale_x_continuous(breaks = seq(from = 0, to = 60, by = 10)) +
   ylim(0, 150)
 ```
@@ -41,9 +41,12 @@ data_peru_cong %>%
   ggplot(aes(x = President, y = Proportion)) + 
   geom_col(aes(fill = Seats)) +
   ggtitle("Proportion of seats in Congress, 2001-2022") + 
-  theme(plot.title = element_text(hjust = 0.5)) +
+   theme(plot.title = element_text(hjust = 0.5),
+         plot.caption = element_text(hjust = 0.5)) +
   geom_abline(slope=0, intercept=0.34,  col = "red", lty=5, size=0.73) +
   scale_fill_manual(values = c("grey60", "dodgerblue4") ) +
-  labs(x = "Presidents", y = "Proportion")+
+  labs(x = "Presidents", 
+       y = "Proportion",
+       caption = "(*) The red dotted vertical line represents the minimum votes required (i.e., 34%) to preserve the Presidency \n if a ouster caucus is proposed by the Congress \n Source: Observatory of Governance - National Jury of Elections of Peru (collected of February 15th, 2022)") +
   coord_flip()
 ```
